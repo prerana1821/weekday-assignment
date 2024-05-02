@@ -9,4 +9,5 @@ export interface Job {
   minExp: number;
   maxExp: number;
   jobRole: string;
+  company: string;
 }
