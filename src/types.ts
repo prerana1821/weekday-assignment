@@ -10,4 +10,5 @@ export interface Job {
   maxExp: number;
   jobRole: string;
   company: string;
+  techStack: string[];
 }

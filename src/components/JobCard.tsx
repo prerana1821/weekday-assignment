@@ -20,6 +20,9 @@ const JobCard: React.FC<Props> = ({ job }) => {
               <Typography variant='body2' className='text-xs text-gray-500'>
                 {job.location}
               </Typography>
+              <Typography variant='body2' className='text-xs text-gray-500'>
+                {job.techStack.join(", ")}
+              </Typography>
             </Box>
           </Box>
           <Box className='flex justify-between text-sm mb-4'>

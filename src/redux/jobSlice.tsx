@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./appStore";
 import { Job } from "../types";
 import axios from "axios";
+import { FILTER_OPTIONS } from "../constants";
 
 interface JobState {
   jobs: Job[];
@@ -43,6 +44,18 @@ const generateCompanyName = () => {
   return `${randomPrefix} ${randomSuffix}`;
 };
 
+function generateTechStack() {
+  const selectedTechStack = [];
+  const numElements = Math.floor(Math.random() * 2) + 3; // Select 3 or 4 elements
+  for (let i = 0; i < numElements; i++) {
+    const randomIndex = Math.floor(
+      Math.random() * FILTER_OPTIONS.techStack.length
+    );
+    selectedTechStack.push(FILTER_OPTIONS.techStack[randomIndex]);
+  }
+  return selectedTechStack;
+}
+
 export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async () => {
   const response = await axios.post(
     "https://api.weekday.technology/adhoc/getSampleJdJSON",
@@ -59,7 +72,11 @@ export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async () => {
 
   // TODO: job type without company name
   return response.data.jdList.map((data: Job) => {
-    return { ...data, company: generateCompanyName() };
+    return {
+      ...data,
+      company: generateCompanyName(),
+      techStack: generateTechStack(),
+    };
   });
 });
 
@@ -85,9 +102,9 @@ const jobSlice = createSlice({
     },
     setLocations(state, action) {
       state.filters.locations = action.payload;
-      state.filteredJobs = state.jobs.filter((job) => {
-        return state.filters.locations.includes(job.location.toLowerCase());
-      });
+      state.filteredJobs = state.jobs.filter((job) =>
+        state.filters.locations.includes(job.location.toLowerCase())
+      );
       if (action.payload.length === 0) {
         state.filteredJobs = state.jobs;
       }
@@ -95,33 +112,68 @@ const jobSlice = createSlice({
     setRemoteOnSite(state, action) {
       state.filters.remoteOnSite = action.payload;
       state.filteredJobs = state.jobs.filter((job) =>
-        // TODO: need to fix this
-        // state.filters.remoteOnSite.includes(job.remoteOnSite)
-        state.filters.remoteOnSite.includes(job.location)
+        state.filters.remoteOnSite.includes(job.location.toLowerCase())
       );
+      if (action.payload.length === 0) {
+        state.filteredJobs = state.jobs;
+      }
     },
     setTechStack(state, action) {
-      state.filters.techStack = action.payload;
-      state.filteredJobs = state.jobs.filter((job) =>
-        // TODO: need to fix this
-        // state.filters.techStack.some((tech) => job.techStack.includes(tech))
-        state.filters.techStack.includes(job.jobRole)
-      );
+      const {
+        filters: { techStack },
+        jobs,
+      } = state;
+      const { payload } = action;
+
+      state.filters.techStack = payload;
+
+      state.filteredJobs = jobs.filter((job) => {
+        return payload.every((tech: string) =>
+          job.techStack.includes(tech.toLowerCase())
+        );
+      });
+
+      if (payload.length === 0) {
+        state.filteredJobs = jobs;
+      }
     },
     setRoles(state, action) {
       state.filters.roles = action.payload;
       state.filteredJobs = state.jobs.filter((job) =>
         // TODO: need to fix this
-        // state.filters.roles.some((role) => job.roles.includes(role))
-        state.filters.roles.includes(job.jobRole)
+        // state.filters.roles.some((role) => job.techStack.includes(role))
+        state.filters.roles.includes(job.jobRole.toLowerCase())
       );
+      if (action.payload.length === 0) {
+        state.filteredJobs = state.jobs;
+      }
     },
     setMinBasePay(state, action) {
-      state.filters.minBasePay = action.payload;
-      state.filteredJobs = state.jobs.filter((job) =>
-        // TODO: need to fix this
-        state.filters.minBasePay.includes(job.minJdSalary.toString())
-      );
+      const {
+        filters: { minBasePay },
+        jobs,
+      } = state;
+      const { payload } = action;
+      // TODO: need to fix this
+      // Convert minBasePay to numeric values in USD
+      const numericMinBasePay = minBasePay.map((value) => {
+        return `${parseFloat(value) * 100000}`; // Assuming "L" represents lakhs, converting to USD
+      });
+
+      // Update state filters
+      state.filters.minBasePay = numericMinBasePay;
+
+      // Filter jobs based on minBasePay
+      state.filteredJobs = jobs.filter((job) => {
+        // const jobMinSalary = parseFloat(job.minJdSalary.replace(/[^\d.]/g, "")); // Extract numeric value from minJdSalary
+        return numericMinBasePay.some(
+          (minSalary) => job.minJdSalary >= +minSalary
+        );
+      });
+
+      if (payload.length === 0) {
+        state.filteredJobs = jobs;
+      }
     },
   },
   extraReducers: (builder) => {

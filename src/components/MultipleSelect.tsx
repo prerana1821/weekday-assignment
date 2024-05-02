@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -20,10 +19,10 @@ const MenuProps = {
   },
 };
 
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
+function getStyles(option: string, options: readonly string[], theme: Theme) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      options.indexOf(option) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -43,7 +42,6 @@ const MultipleSelectChip: React.FC<Props> = ({
   onChange,
 }) => {
   const theme = useTheme();
-  // const [personName, setPersonName] = React.useState<string[]>([]);
 
   const handleChange = (event: SelectChangeEvent<typeof selectedValues>) => {
     const { value } = event.target;
@@ -96,8 +94,9 @@ const MultipleSelectChip: React.FC<Props> = ({
             <MenuItem
               key={option}
               value={option}
-              // style={getStyles(option, option, theme)}
+              style={getStyles(option, options, theme)}
             >
+              {/* TODO: convert to titlecase */}
               {option.toUpperCase()}
             </MenuItem>
           ))}

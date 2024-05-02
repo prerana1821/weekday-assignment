@@ -13,7 +13,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ChangeEvent, useEffect, useState } from "react";
 import { FILTER_OPTIONS } from "../constants";
-import { fetchStatesInIndia } from "../services/fetchStatesInIndia";
 
 const Filters = () => {
   const dispatch = useDispatch();
