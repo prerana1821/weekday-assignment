@@ -9,7 +9,7 @@ interface JobState {
   status: "idle" | "loading" | "failed" | "succeeded";
   error?: string;
   filters: {
-    minExperience: number[];
+    minExperience: string[];
     companyName: string;
     locations: string[];
     remoteOnSite: string[];
@@ -22,7 +22,6 @@ interface JobState {
 const initialState: JobState = {
   jobs: [],
   filteredJobs: [],
-
   status: "idle",
   error: "",
   filters: {
@@ -70,6 +69,13 @@ const jobSlice = createSlice({
   reducers: {
     setMinExperience(state, action) {
       state.filters.minExperience = action.payload;
+      state.filteredJobs = state.jobs.filter((job) => {
+        const minExp = job.minExp || 0;
+        return state.filters.minExperience.includes(minExp.toString());
+      });
+      if (action.payload.length === 0) {
+        state.filteredJobs = state.jobs;
+      }
     },
     setCompanyName(state, action) {
       state.filters.companyName = action.payload;
@@ -77,20 +83,45 @@ const jobSlice = createSlice({
         job.company.toLowerCase().includes(action.payload.toLowerCase())
       );
     },
-    setLocation(state, action) {
+    setLocations(state, action) {
       state.filters.locations = action.payload;
+      state.filteredJobs = state.jobs.filter((job) => {
+        return state.filters.locations.includes(job.location.toLowerCase());
+      });
+      if (action.payload.length === 0) {
+        state.filteredJobs = state.jobs;
+      }
     },
     setRemoteOnSite(state, action) {
       state.filters.remoteOnSite = action.payload;
+      state.filteredJobs = state.jobs.filter((job) =>
+        // TODO: need to fix this
+        // state.filters.remoteOnSite.includes(job.remoteOnSite)
+        state.filters.remoteOnSite.includes(job.location)
+      );
     },
     setTechStack(state, action) {
       state.filters.techStack = action.payload;
+      state.filteredJobs = state.jobs.filter((job) =>
+        // TODO: need to fix this
+        // state.filters.techStack.some((tech) => job.techStack.includes(tech))
+        state.filters.techStack.includes(job.jobRole)
+      );
     },
-    setRole(state, action) {
+    setRoles(state, action) {
       state.filters.roles = action.payload;
+      state.filteredJobs = state.jobs.filter((job) =>
+        // TODO: need to fix this
+        // state.filters.roles.some((role) => job.roles.includes(role))
+        state.filters.roles.includes(job.jobRole)
+      );
     },
     setMinBasePay(state, action) {
       state.filters.minBasePay = action.payload;
+      state.filteredJobs = state.jobs.filter((job) =>
+        // TODO: need to fix this
+        state.filters.minBasePay.includes(job.minJdSalary.toString())
+      );
     },
   },
   extraReducers: (builder) => {
@@ -101,6 +132,7 @@ const jobSlice = createSlice({
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.jobs = action.payload;
+        console.log(action.payload);
         state.filteredJobs = action.payload;
       })
       .addCase(fetchJobs.rejected, (state, action) => {
@@ -119,10 +151,10 @@ export const getFilteredJobs = (state: RootState) => state.jobs.filteredJobs;
 export const {
   setMinExperience,
   setCompanyName,
-  setLocation,
+  setLocations,
   setRemoteOnSite,
   setTechStack,
-  setRole,
+  setRoles,
   setMinBasePay,
 } = jobSlice.actions;
 

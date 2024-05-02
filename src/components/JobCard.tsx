@@ -26,6 +26,9 @@ const JobCard: React.FC<Props> = ({ job }) => {
             <Typography variant='body2' className='text-green-500'>
               ${job.minJdSalary} - {job.maxJdSalary} {job.salaryCurrencyCode}
             </Typography>
+            <Typography variant='body2' className='text-green-500'>
+              Experience {job.minExp} - {job.maxExp} years
+            </Typography>
             <Typography variant='body2' className='text-gray-500'>
               Posted 10 days ago
             </Typography>
