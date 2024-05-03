@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "95%",
+    overflowX: "hidden",
   },
   circularButton: {
     borderRadius: "50%",
