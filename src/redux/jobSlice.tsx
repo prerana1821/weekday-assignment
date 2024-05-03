@@ -18,10 +18,13 @@ interface JobState {
     roles: string[];
     minBasePay: string[];
   };
+  currentPage: number;
+  totalJobs: number;
 }
 
 const initialState: JobState = {
   jobs: [],
+
   filteredJobs: [],
   status: "idle",
   error: "",
@@ -34,6 +37,8 @@ const initialState: JobState = {
     roles: [],
     minBasePay: [],
   },
+  currentPage: 1,
+  totalJobs: 0,
 };
 
 const generateCompanyName = () => {
@@ -57,29 +62,38 @@ function generateTechStack() {
   return selectedTechStack;
 }
 
-export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async () => {
-  const response = await axios.post(
-    "https://api.weekday.technology/adhoc/getSampleJdJSON",
-    {
-      limit: 10,
-      offset: 0,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+export const fetchJobs = createAsyncThunk(
+  "jobs/fetchJobs",
+  async (_, { getState }) => {
+    const { currentPage } = (getState() as RootState).jobs;
+    const limit = 10;
+    const offset = (currentPage - 1) * limit;
 
-  // TODO: job type without company name
-  return response.data.jdList.map((data: Job) => {
-    return {
-      ...data,
-      company: generateCompanyName(),
-      techStack: generateTechStack(),
-    };
-  });
-});
+    const response = await axios.post(
+      "https://api.weekday.technology/adhoc/getSampleJdJSON",
+      {
+        limit,
+        offset,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const totalCount = response.data.totalCount; // Extract total count from response
+    const jobs = response.data.jdList.map((data: Job) => {
+      return {
+        ...data,
+        company: generateCompanyName(),
+        techStack: generateTechStack(),
+      };
+    });
+
+    return { jobs, totalCount };
+  }
+);
 
 const jobSlice = createSlice({
   name: "jobs",
@@ -183,9 +197,10 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.jobs = action.payload;
-        console.log(action.payload);
-        state.filteredJobs = action.payload;
+        state.jobs = [...state.jobs, ...action.payload.jobs];
+        state.filteredJobs = [...state.filteredJobs, ...action.payload.jobs];
+        state.totalJobs = action.payload.totalCount;
+        state.currentPage++;
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.status = "failed";

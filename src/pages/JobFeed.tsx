@@ -6,46 +6,39 @@ import {
   getFilteredJobs,
   getJobsError,
   getJobsStatus,
-  selectAllJobs,
 } from "../redux/jobSlice";
 import { Job } from "../types";
-import { AppDispatch } from "../redux/appStore";
 import { Box, Grid } from "@mui/material";
+import { AppDispatch } from "../redux/appStore";
 
 const JobFeed: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const jobs = useSelector(selectAllJobs);
   const filteredJobs = useSelector(getFilteredJobs);
   const status = useSelector(getJobsStatus);
   const error = useSelector(getJobsError);
-  const observer = useRef<IntersectionObserver | null>(null);
+  const observerTarget = useRef(null);
 
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(fetchJobs());
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && status !== "loading") {
+          dispatch(fetchJobs());
+        }
+      },
+      { threshold: 1 }
+    );
 
-    fetchData();
-
-    observer.current = new IntersectionObserver(handleObserver, {
-      root: null,
-      rootMargin: "20px",
-      threshold: 1.0,
-    });
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
 
     return () => {
-      if (observer.current) {
-        observer.current.disconnect();
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
       }
     };
-  }, [dispatch]);
-
-  const handleObserver: IntersectionObserverCallback = (entries) => {
-    if (entries[0].isIntersecting && status !== "loading") {
-      dispatch(fetchJobs());
-    }
-  };
+  }, [observerTarget]);
 
   return (
     <Box sx={{ m: 5 }}>
@@ -58,8 +51,9 @@ const JobFeed: React.FC = () => {
           <JobCard key={job.jdUid} job={job} />
         ))}
       </Grid>
-      <div id='observer' />
+      <div ref={observerTarget}></div>
       {status === "loading" && <p>Loading...</p>}
+      {status === "failed" && <p>{error}</p>}
     </Box>
   );
 };
