@@ -3,7 +3,7 @@ import { Job } from "../types";
 import { Grid } from "@mui/material";
 import { Box, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import { usdToInrInLakhs } from "../utils/stringManipulations";
+import { usdToInrInLakhs } from "../utils/textManipulations";
 import { Button } from "@material-ui/core";
 interface Props {
   job: Job;

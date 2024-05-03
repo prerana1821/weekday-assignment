@@ -12,3 +12,21 @@ export interface Job {
   company: string;
   techStack: string[];
 }
+
+export interface JobState {
+  jobs: Job[];
+  filteredJobs: Job[];
+  status: "idle" | "loading" | "failed" | "succeeded";
+  error?: string;
+  filters: {
+    minExperience: string[];
+    companyName: string;
+    locations: string[];
+    remoteOnSite: string[];
+    techStack: string[];
+    roles: string[];
+    minBasePay: string[];
+  };
+  currentPage: number;
+  totalJobs: number;
+}

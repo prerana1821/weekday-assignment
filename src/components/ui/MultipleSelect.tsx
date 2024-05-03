@@ -8,7 +8,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { ListSubheader } from "@mui/material";
-import { titleCase } from "../utils/stringManipulations";
+import { titleCase } from "../../utils/textManipulations";
 import { makeStyles } from "@material-ui/core/styles";
 
 const ITEM_HEIGHT = 48;

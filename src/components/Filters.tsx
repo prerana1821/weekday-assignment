@@ -1,5 +1,5 @@
 import { TextField, Grid } from "@mui/material";
-import MultipleSelectChip from "./MultipleSelect";
+import MultipleSelectChip from "./ui/MultipleSelect";
 import {
   getJobFilters,
   setCompanyName,

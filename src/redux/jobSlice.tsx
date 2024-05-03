@@ -1,30 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./appStore";
-import { Job } from "../types";
-import { FILTER_OPTIONS } from "../constants";
-import { usdToInrInLakhs } from "../utils/stringManipulations";
-
-interface JobState {
-  jobs: Job[];
-  filteredJobs: Job[];
-  status: "idle" | "loading" | "failed" | "succeeded";
-  error?: string;
-  filters: {
-    minExperience: string[];
-    companyName: string;
-    locations: string[];
-    remoteOnSite: string[];
-    techStack: string[];
-    roles: string[];
-    minBasePay: string[];
-  };
-  currentPage: number;
-  totalJobs: number;
-}
+import { Job, JobState } from "../types";
+import { usdToInrInLakhs } from "../utils/textManipulations";
+import { generateCompanyName } from "../utils/generateCompanyName";
+import { generateTechStack } from "../utils/generateTechStack";
 
 const initialState: JobState = {
   jobs: [],
-
   filteredJobs: [],
   status: "idle",
   error: "",
@@ -40,27 +22,6 @@ const initialState: JobState = {
   currentPage: 1,
   totalJobs: 0,
 };
-
-const generateCompanyName = () => {
-  const prefixes = ["ABC", "XYZ", "Tech", "Global", "Innovative"];
-  const suffixes = ["Corp", "Ltd", "Inc", "Services", "Solutions"];
-  const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-  const randomSuffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-  return `${randomPrefix} ${randomSuffix}`;
-};
-
-function generateTechStack() {
-  // TODO: no repeatative tech
-  const selectedTechStack = [];
-  const numElements = Math.floor(Math.random() * 2) + 3; // Select 3 or 4 elements
-  for (let i = 0; i < numElements; i++) {
-    const randomIndex = Math.floor(
-      Math.random() * FILTER_OPTIONS.techStack.length
-    );
-    selectedTechStack.push(FILTER_OPTIONS.techStack[randomIndex]);
-  }
-  return selectedTechStack;
-}
 
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",

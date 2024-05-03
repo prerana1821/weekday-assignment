@@ -10,7 +10,7 @@ import {
 import { Job } from "../types";
 import { Box, Grid } from "@mui/material";
 import { AppDispatch } from "../redux/appStore";
-import { CardsSkeleton } from "./skeletons";
+import { CardsSkeleton } from "./ui/skeletons";
 
 const JobFeed: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
