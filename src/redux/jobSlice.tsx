@@ -70,29 +70,43 @@ export const fetchJobs = createAsyncThunk(
     const limit = 10;
     const offset = (currentPage - 1) * limit;
 
-    const response = await axios.post(
-      "https://api.weekday.technology/adhoc/getSampleJdJSON",
-      {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    try {
+      const raw = JSON.stringify({
         limit,
         offset,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      });
 
-    const totalCount = response.data.totalCount; // Extract total count from response
-    const jobs = response.data.jdList.map((data: Job) => {
-      return {
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+      };
+
+      const response = await fetch(
+        "https://api.weekday.technology/adhoc/getSampleJdJSON",
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      const totalCount = result.totalCount;
+      const jobs = result.jdList.map((data: Job) => ({
         ...data,
         company: generateCompanyName(),
         techStack: generateTechStack(),
-      };
-    });
+      }));
 
-    return { jobs, totalCount };
+      return { jobs, totalCount };
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      throw error;
+    }
   }
 );
 

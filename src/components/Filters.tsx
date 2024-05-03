@@ -114,3 +114,4 @@ export default Filters;
 // Memoization for Filtering:
 // Optimize Redux State Updates
 // testing
+// Error handling
