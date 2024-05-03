@@ -1,13 +1,17 @@
 import JobFeed from "./components/JobFeed";
 import Filters from "./components/Filters";
-import "./App.css";
 import Layout from "./components/Layout";
+import useScrollToTop from "./hooks/useScrollToTop";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 function App() {
+  const { showButton, scrollToTop } = useScrollToTop();
+
   return (
     <Layout>
       <Filters />
       <JobFeed />
+      {showButton && <ScrollToTopButton scrollToTop={scrollToTop} />}
     </Layout>
   );
 }
@@ -15,5 +19,4 @@ function App() {
 export default App;
 
 // TODO:
-// add scroll to top  of page
 // add shimmerUi load: fix CSS
