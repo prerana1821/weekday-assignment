@@ -1,31 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./appStore";
-import { Job, JobState } from "../types";
+import { Job } from "../types";
 import { usdToInrInLakhs } from "../utils/textManipulations";
 import { generateCompanyName } from "../utils/generateCompanyName";
 import { generateTechStack } from "../utils/generateTechStack";
-
-const initialState: JobState = {
-  jobs: [],
-  filteredJobs: [],
-  status: "idle",
-  error: "",
-  filters: {
-    minExperience: [],
-    companyName: "",
-    locations: [],
-    remoteOnSite: [],
-    techStack: [],
-    roles: [],
-    minBasePay: [],
-  },
-  currentPage: 1,
-  totalJobs: 0,
-};
+import { initialJobState } from "./utils";
 
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
-  async (_, { getState }) => {
+  async (_, { getState, rejectWithValue }) => {
     const { currentPage } = (getState() as RootState).jobs;
     const limit = 10;
     const offset = (currentPage - 1) * limit;
@@ -65,14 +48,17 @@ export const fetchJobs = createAsyncThunk(
       return { jobs, totalCount };
     } catch (error) {
       console.error("Error fetching jobs:", error);
-      throw error;
+
+      return rejectWithValue(
+        `Failed to fetch jobs. Please try again later. Read more about the error: ${error}`
+      );
     }
   }
 );
 
 const jobSlice = createSlice({
   name: "jobs",
-  initialState,
+  initialState: initialJobState,
   reducers: {
     setMinExperience(state, action) {
       state.filters.minExperience = action.payload;
@@ -181,7 +167,9 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error =
+          action.error.message ||
+          "Unknown error occurred. Please try again later.";
       });
   },
 });

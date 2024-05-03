@@ -43,5 +43,3 @@ const Footer: FC = () => {
 };
 
 export default Footer;
-
-// TODO: error handling: if there are no jobs text

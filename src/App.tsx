@@ -17,7 +17,3 @@ function App() {
 }
 
 export default App;
-
-// TODO:
-// modal for show job with hook: show tech stack in modal as skills
-// add shimmerUi load: fix CSS
