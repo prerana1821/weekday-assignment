@@ -3,6 +3,7 @@ import { RootState } from "./appStore";
 import { Job } from "../types";
 import axios from "axios";
 import { FILTER_OPTIONS } from "../constants";
+import { usdToInrInLakhs } from "../utils/stringManipulations";
 
 interface JobState {
   jobs: Job[];
@@ -164,25 +165,22 @@ const jobSlice = createSlice({
 
       state.filters.minBasePay = action.payload;
 
-      // TODO: need to fix this
-      // Convert USD to lakhs using the exchange rate
-      const usdToLakhs = (usd: number) => (usd * 83.38) / 100000;
-
       state.filteredJobs = jobs.filter((job) => {
         let jobMinSalaryInLakhs: number;
         if (job.salaryCurrencyCode === "USD") {
-          jobMinSalaryInLakhs = usdToLakhs(job.minJdSalary);
+          // Convert USD salary to INR lakhs
+          jobMinSalaryInLakhs = usdToInrInLakhs(job.minJdSalary);
         } else if (job.salaryCurrencyCode === "INR") {
-          jobMinSalaryInLakhs = job.minJdSalary / 100000;
+          jobMinSalaryInLakhs = job.minJdSalary / 100000; // Already in lakhs
         } else {
           // Handle other currencies if needed
           // For currencies other than USD and INR, you may need to define their respective conversion rates
           jobMinSalaryInLakhs = job.minJdSalary; // Assuming salary is already in lakhs for other currencies
         }
-
-        return action.payload.some(
-          (minSalary: number) => jobMinSalaryInLakhs >= minSalary
-        );
+        return action.payload.some((minSalary: string) => {
+          console.log({ jobMinSalaryInLakhs, minSalary });
+          return jobMinSalaryInLakhs >= Number(minSalary.slice(0, 2));
+        });
       });
 
       if (payload.length === 0) {
@@ -201,6 +199,10 @@ const jobSlice = createSlice({
         state.filteredJobs = [...state.filteredJobs, ...action.payload.jobs];
         state.totalJobs = action.payload.totalCount;
         state.currentPage++;
+
+        if (Object.values(state.filters).some((filter) => filter.length > 0)) {
+          //   TODO: If any filters are applied, keep applying the filters on new data as well
+        }
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.status = "failed";

@@ -2,12 +2,10 @@ import { Job } from "../types";
 import { Button, CardContent, Grid } from "@mui/material";
 import { Box, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import { titleCase } from "../utils/stringManipulations";
+import { titleCase, usdToInrInLakhs } from "../utils/stringManipulations";
 interface Props {
   job: Job;
 }
-
-const usdToLakhs = (usd: number) => (usd * 83.38) / 100000;
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -81,8 +79,8 @@ const JobCard: React.FC<Props> = ({ job }) => {
           </Box>
           <Box className='flex justify-between text-sm mb-4'>
             <Typography variant='body2' className='text-green-500'>
-              Estimated Salary: ${usdToLakhs(job.minJdSalary)} -{" "}
-              {usdToLakhs(job.maxJdSalary)} {job.salaryCurrencyCode}
+              Estimated Salary: ₹{usdToInrInLakhs(job.minJdSalary)} -{" "}
+              {usdToInrInLakhs(job.maxJdSalary)} LPA
             </Typography>
             <Typography variant='body2' className='text-green-500'>
               Minimum Experience {job.minExp} years

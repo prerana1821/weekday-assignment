@@ -49,6 +49,8 @@ const Filters = () => {
   };
 
   const handleMinBasePayChange = (selected: string[]) => {
+    console.log({ selected });
+
     dispatch(setMinBasePay(selected));
   };
 

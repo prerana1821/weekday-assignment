@@ -8,6 +8,7 @@ const useStyles = makeStyles(() => ({
     padding: "0.5rem",
     backgroundColor: "#fff",
     boxShadow: "0 4px 6px -1px #0000001a",
+    zIndex: 1,
   },
 }));
 
