@@ -15,11 +15,14 @@ type FilterKey = keyof typeof FILTER_OPTIONS | "companyName";
 export const handleFilterChange = (
   filterKey: FilterKey,
   selected: string[],
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  debouncedValue?: string
 ) => {
   switch (filterKey) {
     case "companyName":
-      dispatch(setCompanyName(selected[0]));
+      dispatch(
+        setCompanyName({ value: selected[0], debouncedValue: debouncedValue })
+      );
       break;
     case "minExperience":
       dispatch(setMinExperience(selected));

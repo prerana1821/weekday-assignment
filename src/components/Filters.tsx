@@ -6,6 +6,7 @@ import { getJobFilters } from "../redux/jobSlice";
 import MultipleSelectChip from "./ui/MultipleSelect";
 import { FILTER_LABELS, FILTER_OPTIONS } from "../constants";
 import { handleFilterChange } from "../utils/handleFilterChange";
+import useDebounce from "../hooks/useDebounce";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -17,6 +18,10 @@ const Filters: FC = () => {
   const dispatch = useDispatch();
   const filters = useSelector(getJobFilters);
   const classes = useStyles();
+  const debouncedValue = useDebounce({
+    value: filters.companyName,
+    delay: 500,
+  });
 
   return (
     <Grid
@@ -57,7 +62,12 @@ const Filters: FC = () => {
         variant='outlined'
         value={filters.companyName}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
-          handleFilterChange("companyName", [event.target.value], dispatch)
+          handleFilterChange(
+            "companyName",
+            [event.target.value],
+            dispatch,
+            debouncedValue
+          )
         }
       />
     </Grid>

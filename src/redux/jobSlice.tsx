@@ -72,10 +72,15 @@ const jobSlice = createSlice({
       }
     },
     setCompanyName(state, action) {
-      state.filters.companyName = action.payload;
+      state.filters.companyName = action.payload.value;
       state.filteredJobs = state.jobs.filter((job) =>
-        job.company.toLowerCase().includes(action.payload.toLowerCase())
+        job.company
+          .toLowerCase()
+          .includes(action.payload.debouncedValue.toLowerCase())
       );
+      if (action.payload.value.length === 0) {
+        state.filteredJobs = state.jobs;
+      }
     },
     setLocations(state, action) {
       state.filters.locations = action.payload;
