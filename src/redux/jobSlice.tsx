@@ -120,10 +120,7 @@ const jobSlice = createSlice({
       }
     },
     setTechStack(state, action) {
-      const {
-        filters: { techStack },
-        jobs,
-      } = state;
+      const { jobs } = state;
       const { payload } = action;
 
       state.filters.techStack = payload;
@@ -148,25 +145,29 @@ const jobSlice = createSlice({
       }
     },
     setMinBasePay(state, action) {
-      const {
-        filters: { minBasePay },
-        jobs,
-      } = state;
+      const { jobs } = state;
       const { payload } = action;
+
+      state.filters.minBasePay = action.payload;
+
       // TODO: need to fix this
-      // Convert minBasePay to numeric values in USD
-      const numericMinBasePay = minBasePay.map((value) => {
-        return `${parseFloat(value) * 100000}`; // Assuming "L" represents lakhs, converting to USD
-      });
+      // Convert USD to lakhs using the exchange rate
+      const usdToLakhs = (usd: number) => (usd * 83.38) / 100000;
 
-      // Update state filters
-      state.filters.minBasePay = numericMinBasePay;
-
-      // Filter jobs based on minBasePay
       state.filteredJobs = jobs.filter((job) => {
-        // const jobMinSalary = parseFloat(job.minJdSalary.replace(/[^\d.]/g, "")); // Extract numeric value from minJdSalary
-        return numericMinBasePay.some(
-          (minSalary) => job.minJdSalary >= +minSalary
+        let jobMinSalaryInLakhs: number;
+        if (job.salaryCurrencyCode === "USD") {
+          jobMinSalaryInLakhs = usdToLakhs(job.minJdSalary);
+        } else if (job.salaryCurrencyCode === "INR") {
+          jobMinSalaryInLakhs = job.minJdSalary / 100000;
+        } else {
+          // Handle other currencies if needed
+          // For currencies other than USD and INR, you may need to define their respective conversion rates
+          jobMinSalaryInLakhs = job.minJdSalary; // Assuming salary is already in lakhs for other currencies
+        }
+
+        return action.payload.some(
+          (minSalary: number) => jobMinSalaryInLakhs >= minSalary
         );
       });
 

@@ -6,6 +6,8 @@ interface Props {
   job: Job;
 }
 
+const usdToLakhs = (usd: number) => (usd * 83.38) / 100000;
+
 const JobCard: React.FC<Props> = ({ job }) => {
   return (
     <Grid item xs={2} sm={4} md={4}>
@@ -27,7 +29,8 @@ const JobCard: React.FC<Props> = ({ job }) => {
           </Box>
           <Box className='flex justify-between text-sm mb-4'>
             <Typography variant='body2' className='text-green-500'>
-              ${job.minJdSalary} - {job.maxJdSalary} {job.salaryCurrencyCode}
+              ${usdToLakhs(job.minJdSalary)} - {usdToLakhs(job.maxJdSalary)}{" "}
+              {job.salaryCurrencyCode}
             </Typography>
             <Typography variant='body2' className='text-green-500'>
               Experience {job.minExp} - {job.maxExp} years

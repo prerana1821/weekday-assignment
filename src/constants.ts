@@ -47,5 +47,5 @@ export const FILTER_OPTIONS = {
       list: ["product manager"],
     },
   ],
-  minBasePay: ["0", "10", "20", "30", "40", "50", "60", "70"],
+  minBasePay: [0, 10, 20, 30, 40, 50, 60, 70],
 };

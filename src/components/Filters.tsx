@@ -11,7 +11,7 @@ import {
   setTechStack,
 } from "../redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 import { FILTER_OPTIONS } from "../constants";
 
 const Filters = () => {
@@ -89,13 +89,13 @@ const Filters = () => {
       />
       <MultipleSelectChip
         label='Min base pay'
-        options={FILTER_OPTIONS.minBasePay}
+        options={FILTER_OPTIONS.minBasePay.map((value) => `${value}L`)}
         selectedValues={filters.minBasePay}
         onChange={handleMinBasePayChange}
       />
       <TextField
-        id='outlined-basic'
-        label='Outlined'
+        id='company-name'
+        label='Company Name'
         variant='outlined'
         value={filters.companyName}
         onChange={handleCompanyName}
