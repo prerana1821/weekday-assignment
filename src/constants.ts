@@ -1,14 +1,6 @@
-export const MINIMUM_BASE_PAY = [
-  "0",
-  "5",
-  "10",
-  "20",
-  "30",
-  "40",
-  "50",
-  "60",
-  "70",
-];
+export const MINIMUM_BASE_PAY = Array.from({ length: 10 }, (_, i) =>
+  (i + 1).toString()
+);
 
 export const JOB_ROLES = [
   {
