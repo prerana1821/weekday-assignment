@@ -1,28 +1,8 @@
 import { FC, ReactNode } from "react";
-import { Box, useTheme } from "@material-ui/core";
-import { LanguageOutlined } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
 import { Typography } from "@mui/material";
-
-const useStyles = makeStyles((theme) => ({
-  footer: {
-    padding: "0.5rem",
-    margin: "0 auto",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  socialButton: {
-    backgroundColor: "#edf2f7",
-    borderRadius: "50%",
-    width: "40px",
-    height: "40px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: theme.palette.primary.main,
-  },
-}));
+import { LanguageOutlined } from "@material-ui/icons";
+import useStyles from "./Footer.styles";
 
 type SocialButtonProps = {
   children: ReactNode;
@@ -47,7 +27,6 @@ const SocialButton: FC<SocialButtonProps> = ({ children, label, href }) => {
 
 const Footer: FC = () => {
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <footer className={classes.footer}>
@@ -64,3 +43,5 @@ const Footer: FC = () => {
 };
 
 export default Footer;
+
+// TODO: error handling: if there are no jobs text

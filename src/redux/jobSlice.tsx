@@ -77,6 +77,7 @@ const jobSlice = createSlice({
     setMinExperience(state, action) {
       state.filters.minExperience = action.payload;
       state.filteredJobs = state.jobs.filter((job) => {
+        // TODO: min exp and greater
         const minExp = job.minExp || 0;
         return state.filters.minExperience.includes(minExp.toString());
       });

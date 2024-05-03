@@ -1,4 +1,4 @@
-import { Theme, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -8,53 +8,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { ListSubheader } from "@mui/material";
-import { titleCase } from "../../utils/textManipulations";
-import { makeStyles } from "@material-ui/core/styles";
+import { titleCase } from "../../../utils/textManipulations";
+import { getStyles, useStyles, MenuProps } from "./MultipleSelect.styles";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 180,
-    },
-  },
-};
-
-const useStyles = makeStyles({
-  paper: {
-    overflowX: "scroll",
-    width: "180px",
-  },
-});
-
-function getStyles(
-  option: string,
-  options: readonly (string | { title: string; list: string[] })[],
-  theme: Theme
-) {
-  for (const item of options) {
-    if (typeof item === "string") {
-      if (item === option) {
-        return {
-          fontWeight: theme.typography.fontWeightMedium,
-        };
-      }
-    } else {
-      if ("options" in item && item.list.includes(option)) {
-        return {
-          fontWeight: theme.typography.fontWeightMedium,
-        };
-      }
-    }
-  }
-  return {
-    fontWeight: theme.typography.fontWeightRegular,
-  };
-}
-
-interface Props {
+interface MultipleSelectChipProps {
   label: string;
   groupedSelect?: boolean;
   options: string[] | { title: string; list: string[] }[];
@@ -62,7 +19,7 @@ interface Props {
   onChange: (selected: string[]) => void;
 }
 
-const MultipleSelectChip: React.FC<Props> = ({
+const MultipleSelectChip: React.FC<MultipleSelectChipProps> = ({
   label,
   groupedSelect,
   options,

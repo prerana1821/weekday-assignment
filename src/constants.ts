@@ -1,4 +1,14 @@
-export const MINIMUM_BASE_PAY = [0, 5, 10, 20, 30, 40, 50, 60, 70];
+export const MINIMUM_BASE_PAY = [
+  "0",
+  "5",
+  "10",
+  "20",
+  "30",
+  "40",
+  "50",
+  "60",
+  "70",
+];
 
 export const JOB_ROLES = [
   {
@@ -68,4 +78,13 @@ export const FILTER_OPTIONS = {
   techStack: TECH_STACK,
   roles: JOB_ROLES,
   minBasePay: MINIMUM_BASE_PAY,
+};
+
+export const FILTER_LABELS = {
+  minExperience: "Experience",
+  locations: "Locations",
+  remoteOnSite: "Work Mode",
+  techStack: "Tech Stack",
+  roles: "Job Roles",
+  minBasePay: "Minimum Salary",
 };
