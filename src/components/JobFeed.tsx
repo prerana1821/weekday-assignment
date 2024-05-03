@@ -59,7 +59,7 @@ const JobFeed: FC = () => {
           <Typography variant='h5' align='center' color='error'>
             {error}
           </Typography>
-        ) : filteredJobs.length === 0 ? (
+        ) : filteredJobs.length === 0 && status !== "loading" ? (
           <Typography variant='h5' align='center'>
             No jobs found. Please try a different filter or search term.
           </Typography>
