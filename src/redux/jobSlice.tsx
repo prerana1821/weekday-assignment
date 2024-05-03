@@ -72,13 +72,14 @@ const jobSlice = createSlice({
       }
     },
     setCompanyName(state, action) {
-      state.filters.companyName = action.payload.value;
+      const { value, debouncedValue } = action.payload;
+      state.filters.companyName = value;
       state.filteredJobs = state.jobs.filter((job) =>
-        job.company
-          .toLowerCase()
-          .includes(action.payload.debouncedValue.toLowerCase())
+        debouncedValue.length === 0
+          ? job.company.toLowerCase().includes(value.toLowerCase())
+          : job.company.toLowerCase().includes(debouncedValue.toLowerCase())
       );
-      if (action.payload.value.length === 0) {
+      if (value.length === 0) {
         state.filteredJobs = state.jobs;
       }
     },
@@ -129,7 +130,7 @@ const jobSlice = createSlice({
       const { jobs } = state;
       const { payload } = action;
 
-      state.filters.minBasePay = action.payload;
+      state.filters.minBasePay = payload;
 
       state.filteredJobs = jobs.filter((job) => {
         let jobMinSalaryInLakhs: number;
@@ -143,9 +144,8 @@ const jobSlice = createSlice({
           // For currencies other than USD and INR, you may need to define their respective conversion rates
           jobMinSalaryInLakhs = job.minJdSalary; // Assuming salary is already in lakhs for other currencies
         }
-        return action.payload.some((minSalary: string) => {
-          console.log({ jobMinSalaryInLakhs, minSalary });
-          return jobMinSalaryInLakhs >= Number(minSalary.slice(0, 2));
+        return payload.some((minSalary: string) => {
+          return jobMinSalaryInLakhs >= Number(minSalary.slice(0, 1));
         });
       });
 

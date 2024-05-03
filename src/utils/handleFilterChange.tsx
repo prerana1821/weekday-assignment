@@ -9,8 +9,7 @@ import {
   setRoles,
   setTechStack,
 } from "../redux/jobSlice";
-
-type FilterKey = keyof typeof FILTER_OPTIONS | "companyName";
+import { FilterKey } from "../types";
 
 export const handleFilterChange = (
   filterKey: FilterKey,

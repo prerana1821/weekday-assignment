@@ -1,3 +1,5 @@
+import { FILTER_OPTIONS } from "./constants";
+
 export interface Job {
   jdUid: string;
   jdLink: string;
@@ -30,3 +32,5 @@ export interface JobState {
   currentPage: number;
   totalJobs: number;
 }
+
+export type FilterKey = keyof typeof FILTER_OPTIONS | "companyName";
