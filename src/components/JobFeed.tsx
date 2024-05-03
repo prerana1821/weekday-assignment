@@ -10,6 +10,7 @@ import {
 import { Job } from "../types";
 import { Box, Grid } from "@mui/material";
 import { AppDispatch } from "../redux/appStore";
+import { CardsSkeleton } from "./skeletons";
 
 const JobFeed: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,7 +53,7 @@ const JobFeed: React.FC = () => {
         ))}
       </Grid>
       <div ref={observerTarget}></div>
-      {status === "loading" && <p>Loading...</p>}
+      {status === "loading" && <CardsSkeleton />}
       {status === "failed" && <p>{error}</p>}
     </Box>
   );

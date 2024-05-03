@@ -15,6 +15,5 @@ function App() {
 export default App;
 
 // TODO:
-// create a layout component
 // add scroll to top  of page
-// add shimmerUi load
+// add shimmerUi load: fix CSS
