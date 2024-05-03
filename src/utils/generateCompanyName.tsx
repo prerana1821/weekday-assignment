@@ -1,7 +1,10 @@
+import { COMPANY_PREFIXES, COMPANY_SUFFIXES } from "../constants";
+
 export const generateCompanyName = () => {
-  const prefixes = ["ABC", "XYZ", "Tech", "Global", "Innovative"];
-  const suffixes = ["Corp", "Ltd", "Inc", "Services", "Solutions"];
-  const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-  const randomSuffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+  const randomPrefix =
+    COMPANY_PREFIXES[Math.floor(Math.random() * COMPANY_PREFIXES.length)];
+  const randomSuffix =
+    COMPANY_SUFFIXES[Math.floor(Math.random() * COMPANY_SUFFIXES.length)];
+
   return `${randomPrefix} ${randomSuffix}`;
 };

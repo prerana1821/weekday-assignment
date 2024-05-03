@@ -2,22 +2,14 @@ import { FC, ChangeEvent, useEffect } from "react";
 import { Grid, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  getJobFilters,
-  setCompanyName,
-  setLocations,
-  setMinBasePay,
-  setMinExperience,
-  setRemoteOnSite,
-  setRoles,
-  setTechStack,
-} from "../redux/jobSlice";
+import { getJobFilters } from "../redux/jobSlice";
 import MultipleSelectChip from "./ui/MultipleSelect";
 import { FILTER_LABELS, FILTER_OPTIONS } from "../constants";
 import { handleFilterChange } from "../utils/handleFilterChange";
 import useDebounce from "../hooks/useDebounce";
 import { useLocation, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
+import { FilterKey } from "../types";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -37,34 +29,43 @@ const Filters: FC = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    if (searchParams.get("companyName")) {
-      dispatch(
-        setCompanyName({
-          value: searchParams.get("companyName"),
-          debouncedValue,
-        })
-      );
-    }
+  // useEffect(() => {
+  //   if (searchParams.get("companyName")) {
+  //     dispatch(
+  //       setCompanyName({
+  //         value: searchParams.get("companyName"),
+  //         debouncedValue,
+  //       })
+  //     );
+  //   }
 
-    if (searchParams.get("locations")) {
-      dispatch(setLocations(searchParams.getAll("locations")));
-    }
-    if (searchParams.get("minBasePay")) {
-      dispatch(setMinBasePay(searchParams.getAll("minBasePay")));
-    }
-    if (searchParams.get("minExperience")) {
-      dispatch(setMinExperience(searchParams.getAll("minExperience")));
-    }
-    if (searchParams.get("remoteOnSite")) {
-      dispatch(setRemoteOnSite(searchParams.getAll("remoteOnSite")));
-    }
-    if (searchParams.get("roles")) {
-      dispatch(setRoles(searchParams.getAll("roles")));
-    }
-    if (searchParams.get("techStack")) {
-      dispatch(setTechStack(searchParams.getAll("techStack")));
-    }
+  //   if (searchParams.get("locations")) {
+  //     dispatch(setLocations(searchParams.getAll("locations")));
+  //   }
+  //   if (searchParams.get("minBasePay")) {
+  //     dispatch(setMinBasePay(searchParams.getAll("minBasePay")));
+  //   }
+  //   if (searchParams.get("minExperience")) {
+  //     dispatch(setMinExperience(searchParams.getAll("minExperience")));
+  //   }
+  //   if (searchParams.get("remoteOnSite")) {
+  //     dispatch(setRemoteOnSite(searchParams.getAll("remoteOnSite")));
+  //   }
+  //   if (searchParams.get("roles")) {
+  //     dispatch(setRoles(searchParams.getAll("roles")));
+  //   }
+  //   if (searchParams.get("techStack")) {
+  //     dispatch(setTechStack(searchParams.getAll("techStack")));
+  //   }
+  // }, [location.search]);
+
+  useEffect(() => {
+    [...Object.keys(FILTER_LABELS), "companyName"].forEach((key) => {
+      const value = searchParams.getAll(key);
+      if (value.length > 0) {
+        handleFilterChange(key as FilterKey, value, dispatch, debouncedValue);
+      }
+    });
   }, [location.search]);
 
   useEffect(() => {

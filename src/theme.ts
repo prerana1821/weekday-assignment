@@ -1,4 +1,3 @@
-import { cyan } from "@material-ui/core/colors";
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -7,7 +6,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: cyan["A200"],
+      main: "#55EFC4",
     },
     secondary: {
       main: "#fff",

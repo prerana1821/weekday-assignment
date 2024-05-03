@@ -80,3 +80,26 @@ export const FILTER_LABELS = {
   roles: "Job Roles",
   minBasePay: "Minimum Salary",
 };
+
+export const COMPANY_PREFIXES = [
+  "ABC",
+  "XYZ",
+  "Tech",
+  "Global",
+  "Innovative",
+  "Acme",
+  "Dynamic",
+  "Blue",
+  "Red",
+];
+export const COMPANY_SUFFIXES = [
+  "Corp",
+  "Ltd",
+  "Inc",
+  "Services",
+  "Solutions",
+  "Enterprises",
+  "Group",
+  "Industries",
+  "Partners",
+];
