@@ -47,6 +47,8 @@ const JobFeed: React.FC = () => {
         container
         spacing={{ xs: 1, sm: 2, md: 3 }}
         columns={{ xs: 1, sm: 8, md: 12 }}
+        justifyContent={"center"}
+        gap={6}
       >
         {filteredJobs.map((job: Job) => (
           <JobCard key={job.jdUid} job={job} />

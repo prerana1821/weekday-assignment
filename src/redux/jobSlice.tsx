@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./appStore";
 import { Job } from "../types";
-import axios from "axios";
 import { FILTER_OPTIONS } from "../constants";
 import { usdToInrInLakhs } from "../utils/stringManipulations";
 

@@ -57,7 +57,13 @@ const Filters = () => {
   const classes = useStyles();
 
   return (
-    <Grid container spacing={2} className={classes.grid} alignItems={"center"}>
+    <Grid
+      container
+      spacing={2}
+      className={classes.grid}
+      alignItems={"center"}
+      justifyContent={"center"}
+    >
       <MultipleSelectChip
         label='Min experience'
         options={FILTER_OPTIONS.minExperience}
