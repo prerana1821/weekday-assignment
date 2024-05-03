@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import JobCard from "../components/JobCard";
+import JobCard from "./JobCard";
 import {
   fetchJobs,
   getFilteredJobs,

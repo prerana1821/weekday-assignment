@@ -13,19 +13,17 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ChangeEvent } from "react";
 import { FILTER_OPTIONS } from "../constants";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => ({
+  grid: {
+    padding: "2rem",
+  },
+}));
 
 const Filters = () => {
   const dispatch = useDispatch();
   const filters = useSelector(getJobFilters);
-
-  // const [statesInIndia, setStatesInIndia] = useState([]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const states = await fetchStatesInIndia();
-  //     setStatesInIndia(states);
-  //   })();
-  // }, []);
 
   const handleCompanyName = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCompanyName(event.target.value));
@@ -54,8 +52,10 @@ const Filters = () => {
     dispatch(setMinBasePay(selected));
   };
 
+  const classes = useStyles();
+
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} className={classes.grid} alignItems={"center"}>
       <MultipleSelectChip
         label='Min experience'
         options={FILTER_OPTIONS.minExperience}
@@ -89,13 +89,14 @@ const Filters = () => {
       />
       <MultipleSelectChip
         label='Min base pay'
-        options={FILTER_OPTIONS.minBasePay.map((value) => `${value}L`)}
+        options={FILTER_OPTIONS.minBasePay.map((value) => `${value} Lakhs`)}
         selectedValues={filters.minBasePay}
         onChange={handleMinBasePayChange}
       />
       <TextField
+        size='small'
         id='company-name'
-        label='Company Name'
+        placeholder='Company Name'
         variant='outlined'
         value={filters.companyName}
         onChange={handleCompanyName}

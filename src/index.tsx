@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 
 const theme = createTheme({
   typography: {
-    fontFamily: "Lexend, sans-serif",
+    fontFamily: "'Quicksand', sans-serif",
   },
   palette: {
     primary: {
