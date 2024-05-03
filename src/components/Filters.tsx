@@ -82,6 +82,7 @@ const Filters = () => {
       />
       <MultipleSelectChip
         label='Role'
+        groupedSelect
         options={FILTER_OPTIONS.roles}
         selectedValues={filters.roles}
         onChange={handleRoleChange}

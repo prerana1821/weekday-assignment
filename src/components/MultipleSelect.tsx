@@ -7,6 +7,8 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import CancelIcon from "@material-ui/icons/Cancel";
+import { ListSubheader } from "@mui/material";
+import { Fragment } from "react/jsx-runtime";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -19,24 +21,42 @@ const MenuProps = {
   },
 };
 
-function getStyles(option: string, options: readonly string[], theme: Theme) {
+function getStyles(
+  option: string,
+  options: readonly (string | { title: string; list: string[] })[],
+  theme: Theme
+) {
+  for (const item of options) {
+    if (typeof item === "string") {
+      if (item === option) {
+        return {
+          fontWeight: theme.typography.fontWeightMedium,
+        };
+      }
+    } else {
+      if ("options" in item && item.list.includes(option)) {
+        return {
+          fontWeight: theme.typography.fontWeightMedium,
+        };
+      }
+    }
+  }
   return {
-    fontWeight:
-      options.indexOf(option) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+    fontWeight: theme.typography.fontWeightRegular,
   };
 }
 
 interface Props {
   label: string;
-  options: string[];
+  groupedSelect?: boolean;
+  options: string[] | { title: string; list: string[] }[];
   selectedValues: string[];
   onChange: (selected: string[]) => void;
 }
 
 const MultipleSelectChip: React.FC<Props> = ({
   label,
+  groupedSelect,
   options,
   selectedValues,
   onChange,
@@ -90,16 +110,33 @@ const MultipleSelectChip: React.FC<Props> = ({
           )}
           MenuProps={MenuProps}
         >
-          {options.map((option) => (
-            <MenuItem
-              key={option}
-              value={option}
-              style={getStyles(option, options, theme)}
-            >
-              {/* TODO: convert to titlecase */}
-              {option.toUpperCase()}
-            </MenuItem>
-          ))}
+          {groupedSelect
+            ? (options as { title: string; list: string[] }[]).flatMap(
+                (group) => [
+                  <ListSubheader key={group.title}>
+                    {group.title}
+                  </ListSubheader>,
+                  ...group.list.map((item) => (
+                    <MenuItem
+                      key={item}
+                      value={item}
+                      style={getStyles(item, options, theme)}
+                    >
+                      {item.toUpperCase()}
+                    </MenuItem>
+                  )),
+                ]
+              )
+            : (options as string[]).map((option) => (
+                <MenuItem
+                  key={option}
+                  value={option}
+                  style={getStyles(option, options, theme)}
+                >
+                  {/* TODO: convert to titlecase */}
+                  {option.toUpperCase()}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
     </div>

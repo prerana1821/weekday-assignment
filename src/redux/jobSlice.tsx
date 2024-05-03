@@ -45,6 +45,7 @@ const generateCompanyName = () => {
 };
 
 function generateTechStack() {
+  // TODO: no repeatative tech
   const selectedTechStack = [];
   const numElements = Math.floor(Math.random() * 2) + 3; // Select 3 or 4 elements
   for (let i = 0; i < numElements; i++) {
@@ -140,8 +141,6 @@ const jobSlice = createSlice({
     setRoles(state, action) {
       state.filters.roles = action.payload;
       state.filteredJobs = state.jobs.filter((job) =>
-        // TODO: need to fix this
-        // state.filters.roles.some((role) => job.techStack.includes(role))
         state.filters.roles.includes(job.jobRole.toLowerCase())
       );
       if (action.payload.length === 0) {
