@@ -1,15 +1,14 @@
-import JobFeed from "./pages/JobFeed";
-import Header from "./components/Header";
+import JobFeed from "./components/JobFeed";
 import Filters from "./components/Filters";
 import "./App.css";
+import Layout from "./components/Layout";
 
 function App() {
   return (
-    <>
-      <Header />
+    <Layout>
       <Filters />
       <JobFeed />
-    </>
+    </Layout>
   );
 }
 
