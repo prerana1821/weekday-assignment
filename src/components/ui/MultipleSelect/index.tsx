@@ -1,15 +1,18 @@
 import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
-import CancelIcon from "@material-ui/icons/Cancel";
-import { ListSubheader } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+import {
+  ListSubheader,
+  Chip,
+  Select,
+  FormControl,
+  MenuItem,
+  InputLabel,
+  OutlinedInput,
+  Box,
+} from "@mui/material";
 import { titleCase } from "../../../utils/textManipulations";
 import { getStyles, useStyles, MenuProps } from "./MultipleSelect.styles";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 interface MultipleSelectChipProps {
   label: string;

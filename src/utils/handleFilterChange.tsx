@@ -1,5 +1,4 @@
 import { Dispatch } from "@reduxjs/toolkit";
-import { FILTER_OPTIONS } from "../constants";
 import {
   setCompanyName,
   setLocations,

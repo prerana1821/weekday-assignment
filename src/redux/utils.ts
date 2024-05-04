@@ -1,5 +1,5 @@
-import { Job, JobFilters, JobState } from "../types";
 import { usdToInrInLakhs } from "../utils/textManipulations";
+import { Job, JobFilters, JobState } from "../types";
 
 export const initialJobState: JobState = {
   jobs: [],

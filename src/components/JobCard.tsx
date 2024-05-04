@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Job } from "../types";
-import { Grid } from "@mui/material";
-import { Box, Typography } from "@mui/material";
+import { Button } from "@material-ui/core";
+import { Box, Typography, Grid } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import { usdToInrInLakhs } from "../utils/textManipulations";
-import { Button } from "@material-ui/core";
 import Modal from "./ui/Modal";
 interface Props {
   job: Job;

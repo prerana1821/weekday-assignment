@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./appStore";
-import { Job } from "../types";
 import { generateCompanyName } from "../utils/generateCompanyName";
 import { generateTechStack } from "../utils/generateTechStack";
 import { applyFilters, initialJobState } from "./utils";
+import { RootState } from "./appStore";
+import { Job } from "../types";
 
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",

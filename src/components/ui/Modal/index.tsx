@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
+import { titleCase, usdToInrInLakhs } from "../../../utils/textManipulations";
+import { Typography } from "@mui/material";
 import useStyles from "./Modal.styles";
 import { Job } from "../../../types";
-import { Typography } from "@mui/material";
-import { titleCase, usdToInrInLakhs } from "../../../utils/textManipulations";
 
 export default function Modal({
   setShowModal,

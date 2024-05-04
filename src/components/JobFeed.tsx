@@ -8,10 +8,10 @@ import {
   getJobsError,
   getJobsStatus,
 } from "../redux/jobSlice";
-import { Job } from "../types";
 import { Box, Grid, Typography } from "@mui/material";
 import { AppDispatch } from "../redux/appStore";
 import { CardsSkeleton } from "./ui/skeletons";
+import { Job } from "../types";
 
 const JobFeed: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
