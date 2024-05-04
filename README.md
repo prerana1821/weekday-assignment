@@ -1,64 +1,64 @@
-# Candidate Application Platform
+<div align="center">
+  <a href="https://github.com/prerana1821/weekday-assignment">
+    <img src="./public/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-This project is a candidate application platform that allows users to view job listings, filter jobs based on various criteria, and implement infinite scroll for a seamless browsing experience.
+  <h3 align="center">Weekday Assignment</h3>
 
-## Demo
+  <p align="center">
+      Explore Job Listings, Filter, and Apply with Ease
+    <br />
+    <a href="https://weekday-assignment-ten.vercel.app/"><strong>Go to App »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/prerana1821/weekday-assignment/pulls">Raise a PR</a>
+    ·
+    <a href="https://github.com/prerana1821/weekday-assignment/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/prerana1821/weekday-assignment/issues">Request Feature</a>
+  </p>
+</div>
 
-Insert gif or link to demo
+<p align="center">
+ This Weekday Assignment is a web application that simplifies the job search process by providing users with a platform to explore job listings, filter them based on various criteria, and seamlessly apply for positions of interest. With intuitive features and a user-friendly interface, the application aims to streamline the job hunting experience for users.
+</p>
 
-## Deployment
+# Demo
 
-To deploy this project run
+<iframe width="560" height="315" src="https://github.com/prerana1821/weekday-assignment/assets/61601706/cc4f4662-fd89-4b1c-a0a5-e569799a6e21" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" ></iframe>
 
-```
-npm run deploy
-```
+## Key Features
 
-## Features
+- **View Job Listings**: Explore a comprehensive list of job openings from various companies and industries.
+- **Filtering Options**: Filter job listings based on various criteria such as job title, location, company name, salary, and more.
+- **URL-Based Filtering**: Apply filters to job listings directly through the URL. This feature allows you to share specific filtered job listings with others seamlessly.
+- **Infinite Scroll**: Enjoy a seamless browsing experience with infinite scroll. As you reach the end of the page, more job listings will dynamically load, ensuring you never run out of opportunities to explore.
+- **Responsive Design**: The app is designed to be responsive and adaptable to different screen sizes and devices. Whether you're using a desktop, tablet, or smartphone, Job Feed provides an optimized experience.
 
-- **Job Cards**: Display job listings with job title, company name, location, job description, experience required, and apply button/link.
-- **Filters**: Implement filters for refining job listings based on minimum experience, company name, location, remote/on-site, tech stack, role, and minimum base pay.
-- **Infinite Scroll**: Implement infinite scroll to load additional job listings automatically as the user scrolls down the page.
-- **Responsive Design**: Ensure the platform is responsive and works well on different screen sizes.
+## TODO Features
+
+- [ ] E2E Testing withCypress
+- [ ] React Virtualization on List
 
 ## Tech Stack
 
-- **Client:** React, Redux, CSS, Material UI
+- ReactJs
+- Redux
+- CSS
+- Material UI
 
-## Installation
+## Getting Started
 
-Install weekday-assignment with npm
+Follow these steps to run weekday-assignment on your local machine:
 
-```
-npm install weekday-assignment
-cd weekday-assignment
-```
+- Clone the repository: git clone https://github.com/prerana1821/weekday-assignment.git
+- Install dependencies: npm install
+- Start the development server: npm start
+- Open your web browser and go to http://localhost:3000 to access the website.
 
-## Run Locally
+## Acknowledgments
 
-Clone the project
-
-```
-git clone https://github.com/prerana1821/weekday-assignment
-```
-
-Go to the project directory
-
-```
-cd weekday-assignment
-```
-
-Install dependencies
-
-```
-npm install
-```
-
-Start the server
-
-```
-npm run start
-```
+I extend my gratitude to the developers of the open-source libraries used in this project, as they have contributed significantly to its success.
 
 ## Feedback
 
