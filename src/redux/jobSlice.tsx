@@ -63,9 +63,10 @@ const jobSlice = createSlice({
     setMinExperience(state, action) {
       state.filters.minExperience = action.payload;
       state.filteredJobs = state.jobs.filter((job) => {
-        // TODO: min exp and greater
         const minExp = job.minExp || 0;
-        return state.filters.minExperience.includes(minExp.toString());
+        return state.filters.minExperience.some(
+          (selectedExp: string) => minExp >= parseInt(selectedExp)
+        );
       });
       if (action.payload.length === 0) {
         state.filteredJobs = state.jobs;
@@ -167,7 +168,70 @@ const jobSlice = createSlice({
         state.currentPage++;
 
         if (Object.values(state.filters).some((filter) => filter.length > 0)) {
-          //   TODO: If any filters are applied, keep applying the filters on new data as well
+          const {
+            minExperience,
+            companyName,
+            locations,
+            remoteOnSite,
+            techStack,
+            roles,
+            minBasePay,
+          } = state.filters;
+
+          if (minExperience.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) => {
+              const minExp = job.minExp || 0;
+              return state.filters.minExperience.some(
+                (selectedExp: string) => minExp >= parseInt(selectedExp)
+              );
+            });
+          }
+          if (companyName.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) =>
+              job.company.toLowerCase().includes(companyName.toLowerCase())
+            );
+          }
+          if (locations.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) =>
+              state.filters.locations.includes(job.location.toLowerCase())
+            );
+          }
+
+          if (remoteOnSite.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) =>
+              state.filters.remoteOnSite.includes(job.location.toLowerCase())
+            );
+          }
+          if (techStack.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) => {
+              return techStack.every((tech: string) =>
+                job.techStack.includes(tech.toLowerCase())
+              );
+            });
+          }
+          if (roles.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) =>
+              state.filters.roles.includes(job.jobRole.toLowerCase())
+            );
+          }
+          if (minBasePay.length > 0) {
+            state.filteredJobs = state.jobs.filter((job) => {
+              let jobMinSalaryInLakhs: number;
+              if (job.salaryCurrencyCode === "USD") {
+                // Convert USD salary to INR lakhs
+                jobMinSalaryInLakhs = usdToInrInLakhs(job.minJdSalary);
+              } else if (job.salaryCurrencyCode === "INR") {
+                jobMinSalaryInLakhs = job.minJdSalary / 100000; // Already in lakhs
+              } else {
+                // Handle other currencies if needed
+                // For currencies other than USD and INR, you may need to define their respective conversion rates
+                jobMinSalaryInLakhs = job.minJdSalary; // Assuming salary is already in lakhs for other currencies
+              }
+              return minBasePay.some((minSalary: string) => {
+                return jobMinSalaryInLakhs >= Number(minSalary.slice(0, 1));
+              });
+            });
+          }
         }
       })
       .addCase(fetchJobs.rejected, (state, action) => {
