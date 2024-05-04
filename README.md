@@ -25,10 +25,7 @@
 
 # Demo
 
-```
-<iframe width="560" height="315" src="https://github.com/prerana1821/weekday-assignment/assets/61601706/cc4f4662-fd89-4b1c-a0a5-e569799a6e21" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" >
-</iframe>
-```
+https://github.com/prerana1821/weekday-assignment/assets/61601706/23f65e24-e5fb-4aee-9d8a-77eaf98cc6f9
 
 ## Key Features
 
