@@ -78,7 +78,6 @@ const MultipleSelectChip: React.FC<MultipleSelectChipProps> = ({
                   />
                 }
                 onDelete={() => handleDelete(value)}
-                onClick={() => console.log("clicked chip")}
               />
             ))}
           </Box>

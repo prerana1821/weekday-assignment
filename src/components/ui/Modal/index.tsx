@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { titleCase, usdToInrInLakhs } from "../../../utils/textManipulations";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import useStyles from "./Modal.styles";
 import { Job } from "../../../types";
 
@@ -52,14 +52,15 @@ export default function Modal({
           </div>
         </div>
         <div className={classes.modalFooter}>
-          <button
+          <Button
+            variant='contained'
             className='button'
             onClick={() => {
               setShowModal(false);
             }}
           >
             Close Modal
-          </button>
+          </Button>
         </div>
       </div>
     </div>
