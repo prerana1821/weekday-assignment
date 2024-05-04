@@ -4,6 +4,7 @@ import JobCard from "./JobCard";
 import {
   fetchJobs,
   getFilteredJobs,
+  getJobFilters,
   getJobsError,
   getJobsStatus,
 } from "../redux/jobSlice";
@@ -14,7 +15,7 @@ import { CardsSkeleton } from "./ui/skeletons";
 
 const JobFeed: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const filters = useSelector(getJobFilters);
   const filteredJobs = useSelector(getFilteredJobs);
   const status = useSelector(getJobsStatus);
   const error = useSelector(getJobsError);
@@ -25,7 +26,15 @@ const JobFeed: FC = () => {
     try {
       observer = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting && status !== "loading") {
+          if (
+            entries[0].isIntersecting &&
+            status !== "loading" &&
+            error?.length === 0 && // Check if there is no existing error
+            !(
+              Object.values(filters).some((filter) => filter?.length > 0) &&
+              filteredJobs.length === 0
+            ) // Check if there are applied filters and no filtered jobs
+          ) {
             dispatch(fetchJobs());
           }
         },

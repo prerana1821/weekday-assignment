@@ -20,17 +20,19 @@ export interface JobState {
   filteredJobs: Job[];
   status: "idle" | "loading" | "failed" | "succeeded";
   error?: string;
-  filters: {
-    minExperience: string[];
-    companyName: string;
-    locations: string[];
-    remoteOnSite: string[];
-    techStack: string[];
-    roles: string[];
-    minBasePay: string[];
-  };
+  filters: JobFilters;
   currentPage: number;
   totalJobs: number;
+}
+
+export interface JobFilters {
+  minExperience: string[];
+  companyName: string;
+  locations: string[];
+  remoteOnSite: string[];
+  techStack: string[];
+  roles: string[];
+  minBasePay: string[];
 }
 
 export type FilterKey = keyof typeof FILTER_OPTIONS | "companyName";

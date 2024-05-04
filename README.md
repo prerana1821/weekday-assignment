@@ -5,7 +5,7 @@
 - URL based filter - DONE
 - Virtualization on list
 - Debounce the Search Input - DONE
-- if filter value length is greater than zero and filterJob length is zero than return text no jobs found
+- if filter value length is greater than zero and filterJob length is zero than return text no jobs found - DONE
 - Optimize Redux State Updates
 - Error handling
 - Testing

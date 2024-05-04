@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./appStore";
 import { Job } from "../types";
-import { usdToInrInLakhs } from "../utils/textManipulations";
 import { generateCompanyName } from "../utils/generateCompanyName";
 import { generateTechStack } from "../utils/generateTechStack";
-import { initialJobState } from "./utils";
+import { applyFilters, initialJobState } from "./utils";
 
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
@@ -62,12 +61,7 @@ const jobSlice = createSlice({
   reducers: {
     setMinExperience(state, action) {
       state.filters.minExperience = action.payload;
-      state.filteredJobs = state.jobs.filter((job) => {
-        const minExp = job.minExp || 0;
-        return state.filters.minExperience.some(
-          (selectedExp: string) => minExp >= parseInt(selectedExp)
-        );
-      });
+      state.filteredJobs = applyFilters(state.jobs, state.filters);
       if (action.payload.length === 0) {
         state.filteredJobs = state.jobs;
       }
@@ -86,72 +80,37 @@ const jobSlice = createSlice({
     },
     setLocations(state, action) {
       state.filters.locations = action.payload;
-      state.filteredJobs = state.jobs.filter((job) =>
-        state.filters.locations.includes(job.location.toLowerCase())
-      );
+      state.filteredJobs = applyFilters(state.jobs, state.filters);
       if (action.payload.length === 0) {
         state.filteredJobs = state.jobs;
       }
     },
     setRemoteOnSite(state, action) {
       state.filters.remoteOnSite = action.payload;
-      state.filteredJobs = state.jobs.filter((job) =>
-        state.filters.remoteOnSite.includes(job.location.toLowerCase())
-      );
+      state.filteredJobs = applyFilters(state.jobs, state.filters);
       if (action.payload.length === 0) {
         state.filteredJobs = state.jobs;
       }
     },
     setTechStack(state, action) {
-      const { jobs } = state;
-      const { payload } = action;
-
-      state.filters.techStack = payload;
-
-      state.filteredJobs = jobs.filter((job) => {
-        return payload.every((tech: string) =>
-          job.techStack.includes(tech.toLowerCase())
-        );
-      });
-
-      if (payload.length === 0) {
-        state.filteredJobs = jobs;
+      state.filters.techStack = action.payload;
+      state.filteredJobs = applyFilters(state.jobs, state.filters);
+      if (action.payload.length === 0) {
+        state.filteredJobs = state.jobs;
       }
     },
     setRoles(state, action) {
       state.filters.roles = action.payload;
-      state.filteredJobs = state.jobs.filter((job) =>
-        state.filters.roles.includes(job.jobRole.toLowerCase())
-      );
+      state.filteredJobs = applyFilters(state.jobs, state.filters);
       if (action.payload.length === 0) {
         state.filteredJobs = state.jobs;
       }
     },
     setMinBasePay(state, action) {
-      const { jobs } = state;
-      const { payload } = action;
-
-      state.filters.minBasePay = payload;
-
-      state.filteredJobs = jobs.filter((job) => {
-        let jobMinSalaryInLakhs: number;
-        if (job.salaryCurrencyCode === "USD") {
-          // Convert USD salary to INR lakhs
-          jobMinSalaryInLakhs = usdToInrInLakhs(job.minJdSalary);
-        } else if (job.salaryCurrencyCode === "INR") {
-          jobMinSalaryInLakhs = job.minJdSalary / 100000; // Already in lakhs
-        } else {
-          // Handle other currencies if needed
-          // For currencies other than USD and INR, you may need to define their respective conversion rates
-          jobMinSalaryInLakhs = job.minJdSalary; // Assuming salary is already in lakhs for other currencies
-        }
-        return payload.some((minSalary: string) => {
-          return jobMinSalaryInLakhs >= Number(minSalary.slice(0, 1));
-        });
-      });
-
-      if (payload.length === 0) {
-        state.filteredJobs = jobs;
+      state.filters.minBasePay = action.payload;
+      state.filteredJobs = applyFilters(state.jobs, state.filters);
+      if (action.payload.length === 0) {
+        state.filteredJobs = state.jobs;
       }
     },
   },
@@ -167,71 +126,17 @@ const jobSlice = createSlice({
         state.totalJobs = action.payload.totalCount;
         state.currentPage++;
 
-        if (Object.values(state.filters).some((filter) => filter.length > 0)) {
-          const {
-            minExperience,
-            companyName,
-            locations,
-            remoteOnSite,
-            techStack,
-            roles,
-            minBasePay,
-          } = state.filters;
-
-          if (minExperience.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) => {
-              const minExp = job.minExp || 0;
-              return state.filters.minExperience.some(
-                (selectedExp: string) => minExp >= parseInt(selectedExp)
-              );
-            });
-          }
-          if (companyName.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) =>
-              job.company.toLowerCase().includes(companyName.toLowerCase())
-            );
-          }
-          if (locations.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) =>
-              state.filters.locations.includes(job.location.toLowerCase())
-            );
-          }
-
-          if (remoteOnSite.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) =>
-              state.filters.remoteOnSite.includes(job.location.toLowerCase())
-            );
-          }
-          if (techStack.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) => {
-              return techStack.every((tech: string) =>
-                job.techStack.includes(tech.toLowerCase())
-              );
-            });
-          }
-          if (roles.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) =>
-              state.filters.roles.includes(job.jobRole.toLowerCase())
-            );
-          }
-          if (minBasePay.length > 0) {
-            state.filteredJobs = state.jobs.filter((job) => {
-              let jobMinSalaryInLakhs: number;
-              if (job.salaryCurrencyCode === "USD") {
-                // Convert USD salary to INR lakhs
-                jobMinSalaryInLakhs = usdToInrInLakhs(job.minJdSalary);
-              } else if (job.salaryCurrencyCode === "INR") {
-                jobMinSalaryInLakhs = job.minJdSalary / 100000; // Already in lakhs
-              } else {
-                // Handle other currencies if needed
-                // For currencies other than USD and INR, you may need to define their respective conversion rates
-                jobMinSalaryInLakhs = job.minJdSalary; // Assuming salary is already in lakhs for other currencies
-              }
-              return minBasePay.some((minSalary: string) => {
-                return jobMinSalaryInLakhs >= Number(minSalary.slice(0, 1));
-              });
-            });
-          }
+        if (Object.values(state.filters).some((filter) => filter?.length > 0)) {
+          state.filteredJobs = applyFilters(
+            [...state.filteredJobs, ...action.payload.jobs],
+            state.filters
+          );
+        }
+        if (
+          state.filteredJobs.length === 0 &&
+          Object.values(state.filters).some((filter) => filter?.length > 0)
+        ) {
+          state.error = "No jobs found. Please apply some different filter.";
         }
       })
       .addCase(fetchJobs.rejected, (state, action) => {
